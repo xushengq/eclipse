@@ -1,0 +1,151 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">日志管理</h3>
+
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 350px;">
+						<input type="text" name="table_search" id="searchNameId"
+							class="form-control pull-right" placeholder="用户名">
+
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default btn-search">
+                                <i class="fa fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-delete">删除</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+						    <th><input type="checkbox" id="checkAll">全选</th>
+							<th>用户名</th>
+							<th>操作</th>
+							<th>请求方法</th>
+							<th>请求参数</th>
+							<th>IP</th>
+							<th>执行时长</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyId">
+					    <tr>
+					       <td colspan="7">数据正在加载中...</td>
+					    </tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="pageId" class="box-footer clearfix">
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+
+
+$(function(){
+	   //为什么要将doGetObjects函数写到load函数对应的回调内部。
+	   $("#pageId").load("doPageUI",function(){
+		   doGetObjects()
+	   });
+	   //$("#pageId").load("daPageUI",doGetObjects)
+	   $(".input-group-btn").on("click",".btn-search",doQueryObjects);
+	   $(".input-group-btn")
+	   .on("click",".btn-delete",doDeleteObjects)
+
+})
+function doDeleteObjects(){
+	   //1.获取选中的id值
+	   var ids=doGetCheckedIds();
+	   if(ids.length==0){
+		  alert("至少选择一个");
+		  return;
+	   }
+	   //2.发异步请求执行删除操作
+	   var url="log/doDeleteObjects";
+	   var params={"ids":ids.toString()};
+	   console.log(params);
+	   $.post(url,params,function(result){
+		   if(result.state==1){
+			 alert(result.message);
+			 doGetObjects();
+		   }else{
+			 alert(result.message);
+		   }
+	   });
+   }
+function doGetCheckedIds(){
+	   //定义一个数组,用于存储选中的checkbox的id值
+	   var array=[];//new Array();
+	   //获取tbody中所有类型为checkbox的input元素
+	   $("#tbodyId input[type=checkbox]").
+	   //迭代这些元素，每发现一个元素都会执行如下回调函数
+	   each(function(){
+		   //假如此元素的checked属性的值为true
+		   if($(this).prop("checked")){
+			   //调用数组对象的push方法将选中对象的值存储到数组
+			   array.push($(this).val());
+		   }
+	   });
+	   return array;
+}
+
+
+function doQueryObjects(){
+	$("#pageId").data("pageCurrent",1)
+	doGetObjects()
+}
+
+function doGetObjects(){
+	
+	var pageCurrent=$("#pageId").data("pageCurrent");
+	if(!pageCurrent)pageCurrent=1;
+	 var params={"pageCurrent":pageCurrent};
+	 var username=$("#searchNameId").val();
+	 if(username) params.username=username;
+	var url="log/doFindPageObjects";
+	$.getJSON(url,params,function(result){
+		debugger;
+		doHandleResponseResult(result);
+	})
+	
+}
+
+function doHandleResponseResult(result){
+	
+	if(result.state==1){
+		doSetTableBodyRows(result.data.records);
+		doSetPagination(result.data)
+	}else{
+		alert(result.message);
+	}	
+}
+ function doSetTableBodyRows(records){
+	 
+	  var tBody=$("#tbodyId");
+	  tBody.empty();
+    for (var i=0;i<records.length;i++){
+	var tr=$("<tr></tr>");
+	var tds=doCreateTds(records[i]);
+	tr.append(tds);
+	tBody.append(tr);
+	}
+}
+ function doCreateTds(data){
+	   var tds="<td><input type='checkbox' class='cBox' name='cItem' value='"+data.id+"'></td>"+
+		   	 "<td>"+data.username+"</td>"+
+		     "<td>"+data.operation+"</td>"+
+		     "<td>"+data.method+"</td>"+
+		     "<td>"+data.params+"</td>"+
+		     "<td>"+data.ip+"</td>"+
+		     "<td>"+data.time+"</td>";	   
+return tds;
+ }
+
+</script>
