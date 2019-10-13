@@ -2,7 +2,7 @@ package com.cy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+//哈哈哈哈哈
 @SpringBootApplication
 public class Application {
 
