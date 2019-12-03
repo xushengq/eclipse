@@ -3,9 +3,13 @@ package com.cy.pj.common.vo;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor 
 public class PageObject<T> implements Serializable {
 	private static final long serialVersionUID = 6780580291247550747L;//类泛型
     /**当前页的页码值*/

@@ -147,6 +147,7 @@
 	   console.log(params);
 	   $.getJSON(url,params,function(result){
 		   console.log(result);
+		   $("#mainContentId").data("rowData1",result.data);
 		   doHandleResponseResult(result);
 	   });
    }
@@ -154,6 +155,7 @@
 	   if(result.state==1){
 		  doSetTableBodyRows(result.data.records);
 		  doSetPagination(result.data);
+		  
 		}else{
 		  alert(result.message);
 	   }

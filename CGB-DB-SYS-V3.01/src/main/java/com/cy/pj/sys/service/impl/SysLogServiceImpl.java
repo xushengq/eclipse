@@ -3,6 +3,7 @@ package com.cy.pj.sys.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.cy.pj.common.exception.ServiceException;
@@ -31,7 +32,7 @@ public class SysLogServiceImpl implements SysLogService{
 			 throw new ServiceException("系统没有查到对应记录");
 		  //3.基于条件查询当前页记录(pageSize定义为2)
 		  //3.1)定义pageSize
-		  int pageSize=10;
+		  int pageSize=3;
 		  //3.2)计算startIndex
 		  int startIndex=(pageCurrent-1)*pageSize;
 		  //3.3)执行当前数据的查询操作
@@ -70,7 +71,14 @@ public class SysLogServiceImpl implements SysLogService{
 			return rows;
 	}
 
+	  @Override
+	   @Async
+		public void saveObject(SysLog entity) {
+         System.out.println(Thread.currentThread().getName());
+		  sysLogDao.insertObject(entity);
+	}
 
+	 
 	  
 
 	}

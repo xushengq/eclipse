@@ -17,7 +17,7 @@ function doJumpToPage(){
 	//获取点击对象的class属性的值
 	//1 $(this)代表当前被点击的对象
 	//2 prop(属性名,)函数用于操作对应属性
- var cls=$(this).prop("class");
+    var cls=$(this).prop("class");
 	//基于class属性的值修改当前页码值
 	//1 获取当前页码值
 	//2 获取总页数
@@ -51,6 +51,8 @@ function doJumpToPage(){
 	   //存储当前页码以及总页数
 	   $("#pageId").data("pageCurrent",pageObject.pageCurrent)
 	    $("#pageId").data("pageCount",pageObject.pageCount)
+	     $("#pageId").data("pageSize",pageObject.pageSize)
+	        $("#pageId").data("rowCount",pageObject.rowCount)
 	 
  }
 

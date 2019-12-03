@@ -50,7 +50,7 @@
         <!-- /.box-body -->
         <div class="box-footer">
           <button type="button" class="btn btn-default btn-cancel">Cancel</button>
-          <button type="button" class="btn btn-info pull-right btn-save">Save</button>
+          <button type="button" id="lalal" class="btn btn-info pull-right btn-save">Save</button>
         </div>
         <!-- /.box-footer -->
       </form>
@@ -87,10 +87,11 @@
  $(document).ready(function(){
 	 //页面加载完成以后加载角色信息并初始化页面
 	  doLoadRoles();
+	 
 	 //事件注册
 	 $(".box-footer")
 	 .on("click",".btn-cancel",doCancel)
-	 .on("click",".btn-save",doSaveOrUpdate);
+	 .on("click",".btn-save",dobanduan);
 	 
 	  $("#treeLayer")
 	  .on("click",".btn-cancel",doHideTree)
@@ -98,8 +99,59 @@
 	 
 	 $(".form-horizontal")
 	 .on("click",".load-sys-dept",doLoadZTreeNodes);
+	 
+	
  });
+ $(".col-sm-10")
+ .on("blur","#usernameId",doplay)
  
+  function doplay(){
+	
+	 
+	 url="user/dolala";
+	 $.get(url,function(result){
+		doHandle(result);
+		$("#mainContentId").data("rowData1",result);
+	   });
+	/*  $.getJSON(url,params,function(result){
+		   doHandleResponseResult(result);
+	   }); */
+	 
+	 
+	 /* 
+	 var da=$("#mainContentId").data("rowData1"); 
+	 alert(da)
+	 debugger
+	var arr=da.records;
+	$.each(arr,function(){
+	var name=$("#usernameId").val();
+		if(name=arr.username)
+			alert("用户名已经存在")
+	}) */
+}
+   
+ function doHandle(result){
+	
+	 var name1=$("#usernameId").val();
+	  /*  $.each(result.function(name,value){
+		   if(name==value)
+			   alert("用户名已经存在")
+	 }); */
+	 var index=result.indexOf(name1);
+	if(index!=-1){
+	var name=prompt("用户名已经存在,请输入正确的用户名");
+	if(name){
+		if(result.indexOf(name)!=-1){
+			alert("请重新输入");
+			debugger
+		$("#usernameId").val("")
+			return;
+		}
+	$("#usernameId").val(name);
+	
+	}
+ }
+ }
  function doHideTree(){
 	  $("#treeLayer").css("display","none");
  }
@@ -130,6 +182,19 @@
  function doCancel(){
 	$("#mainContentId").removeData("rowData");
 	$("#mainContentId").load("user/user_list");
+ }
+ 
+ function dobanduan(){
+	var  rrr= $("#mainContentId").data("rowData1");
+	 var name1=$("#usernameId").val();
+	 var index=rrr.indexOf(name1);
+		if(index!=-1){
+		$(".btn-save").attr({"disabled":"disabled"});
+		return;
+		}
+		
+		doSaveOrUpdate();
+	 
  }
  function doSaveOrUpdate(){
 	 var rowData=$("#mainContentId").data("rowData");

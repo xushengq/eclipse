@@ -126,6 +126,7 @@ function doLoadEditUI(){
 		title="修改菜单信息";
 		//获取选中的当前行的记录(从tr对象上获取)
 		var rowData=doGetCheckedItem();
+		debugger
 		if(!rowData){
 			alert("请先选择");
 			return;
@@ -142,6 +143,7 @@ function doLoadEditUI(){
 }
 
 function doGetCheckedItem(){
+	
 	var tr=$("tbody input[type='radio']:checked")
 	       .parents("tr");
 	//这个值是在jquery.treegrid.extension.js中绑定的

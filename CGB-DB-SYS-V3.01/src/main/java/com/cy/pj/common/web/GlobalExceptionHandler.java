@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
 	public JsonResult doHandleRuntimeException(
 			RuntimeException e){
-   	e.printStackTrace();//也可以写日志
+	e.printStackTrace();//也可以写日志
 		return new JsonResult(e);//封装异常信息
 	}
 }

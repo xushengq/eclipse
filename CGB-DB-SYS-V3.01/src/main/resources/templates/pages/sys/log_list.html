@@ -58,8 +58,30 @@ $(function(){
 	   $(".input-group-btn").on("click",".btn-search",doQueryObjects);
 	   $(".input-group-btn")
 	   .on("click",".btn-delete",doDeleteObjects)
-
+	   $("#checkAll").change(doChangeTBodyCheckBoxState);
+	   $("#tbodyId").on("change",".cBox",
+			   doChangeTHeadCheckBoxState);
 })
+ function doChangeTHeadCheckBoxState(){
+	debugger
+	   //1.定义一个初始状态值.
+	   var flag=true;
+	   //2.获取tbody中所有checkbox对象的状态值,
+	   //然后进行逻辑与操作.
+	   $("#tbodyId input[type='checkbox']")
+	   .each(function(){
+		   flag=flag&&$(this).prop("checked");
+	   })
+	   //3.更新thead中checkbox的状态值
+	   $("#checkAll").prop("checked",flag);
+   }
+function doChangeTBodyCheckBoxState(){
+	   //1.获取thead中全选checkbox对象的状态
+	   var flag=$(this).prop("checked");
+	   //2.设置tbody中checkbox对象的状态
+	   $("#tbodyId input[type='checkbox']")
+	   .prop("checked",flag);
+   }
 function doDeleteObjects(){
 	   //1.获取选中的id值
 	   var ids=doGetCheckedIds();
@@ -67,6 +89,8 @@ function doDeleteObjects(){
 		  alert("至少选择一个");
 		  return;
 	   }
+	   //给出确认删除提示信息
+	   if(!confirm("您确认删除吗?"))return;
 	   //2.发异步请求执行删除操作
 	   var url="log/doDeleteObjects";
 	   var params={"ids":ids.toString()};
@@ -74,12 +98,14 @@ function doDeleteObjects(){
 	   $.post(url,params,function(result){
 		   if(result.state==1){
 			 alert(result.message);
-			 doGetObjects();
+			//doGetObjects();
+			 doRefreshPageAfterDelete();
 		   }else{
 			 alert(result.message);
 		   }
 	   });
    }
+   
 function doGetCheckedIds(){
 	   //定义一个数组,用于存储选中的checkbox的id值
 	   var array=[];//new Array();
@@ -95,7 +121,24 @@ function doGetCheckedIds(){
 	   });
 	   return array;
 }
-
+function doRefreshPageAfterDelete(){
+  
+	  //1.获取当前页码值,总页数
+	  var pageCurrent=
+		  $("#pageId").data("pageCurrent");
+	  var pageCount=
+		  $("#pageId").data("pageCount");
+	  //2.获取thead中checkbox的状态值
+	  var flag=$("#checkAll").prop("checked");
+	  //3.基于条件修改当前页码值,并重新查询
+	  if(pageCurrent==pageCount&&pageCurrent>1&&flag){
+		pageCurrent--; 
+		$("#pageId").data("pageCurrent",pageCurrent);
+	  }
+	  //假如查询文本框中有数据,则清空文本框数据
+	  $("#searchNameId").val("");
+	  doGetObjects();
+ }
 
 function doQueryObjects(){
 	$("#pageId").data("pageCurrent",1)
@@ -103,7 +146,7 @@ function doQueryObjects(){
 }
 
 function doGetObjects(){
-	
+	$("#checkAll").prop("checked",false);
 	var pageCurrent=$("#pageId").data("pageCurrent");
 	if(!pageCurrent)pageCurrent=1;
 	 var params={"pageCurrent":pageCurrent};
@@ -111,7 +154,7 @@ function doGetObjects(){
 	 if(username) params.username=username;
 	var url="log/doFindPageObjects";
 	$.getJSON(url,params,function(result){
-		debugger;
+		
 		doHandleResponseResult(result);
 	})
 	

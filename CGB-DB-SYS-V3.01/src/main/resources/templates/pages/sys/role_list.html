@@ -92,16 +92,43 @@
 	   //2.url
 	   var url="role/doDeleteObject"
 	   //3.ajax request
+	  var flag =confirm("您确定要删除吗");
+	   if(flag)
 	   $.post(url,params,function(result){
 		   if(result.state==1){
 			   alert(result.message);
-			   doGetObjects();
+			   doRefreshPageAfterDelete();
 		   }else{
 			   alert(result.message);
 		   }
 	   })
 	   
    }
+   function doRefreshPageAfterDelete(){
+	   
+		  //1.获取当前页码值,总页数
+		  var pageCurrent=
+			  $("#pageId").data("pageCurrent");
+		  var pageCount=
+			  $("#pageId").data("pageCount");
+		  //2.获取thead中checkbox的状态值
+		  debugger
+		  var pageCount=
+			  $("#pageId").data("pageCount");
+		  var rowCount=
+			  $("#pageId").data("rowCount");
+		  //3.基于条件修改当前页码值,并重新查询
+		  debugger
+		  if(rowCount%3==1&&pageCurrent>1){
+			pageCurrent--; 
+			debugger
+			$("#pageId").data("pageCurrent",pageCurrent);
+		  }
+		  //假如查询文本框中有数据,则清空文本框数据
+		  debugger
+		  $("#searchNameId").val("");
+		  doGetObjects();
+	 }
    function doQueryObjects(){
 	   $("#pageId").data("pageCurrent",1);
 	   doGetObjects();

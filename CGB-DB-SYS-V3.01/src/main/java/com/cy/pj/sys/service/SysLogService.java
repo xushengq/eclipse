@@ -14,4 +14,7 @@ PageObject<SysLog> findPageObjects(
 		 String username,
 		 Integer pageCurrent);
 public int deleteObjects(Integer... ids);
+
+void saveObject(SysLog entity); 
+
 }

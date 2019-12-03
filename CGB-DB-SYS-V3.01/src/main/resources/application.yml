@@ -16,7 +16,7 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/pages/
     suffix: .html
-
+  aop:   proxy-target-class: false
 #mybatis
 mybatis:
   configuration:
@@ -29,5 +29,13 @@ mybatis:
 logging:
   level:
     com.cy: DEBUG
+
+async-thread-pool:
+  corePoolSize: 20
+  maxPoolSize: 1000
+  keepAliveSeconds: 30
+  queueCapacity: 200
   
-    
+  
+  
+  

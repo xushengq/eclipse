@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+
 import com.cy.pj.sys.entity.SysLog;
 
 @Mapper
@@ -17,6 +18,8 @@ public interface SysLogDao {
 	 * @return 当前页的日志记录信息
 	 * 数据库中每条日志信息封装到一个SysLog对象中
 	 */
+	
+	
 	List<SysLog> findPageObjects(
 			      @Param("username")String  username,
 			      @Param("startIndex")Integer startIndex,
@@ -35,4 +38,7 @@ public interface SysLogDao {
 	int getRowCount(@Param("username") String username);
 	
 	int deleteObjects(Integer... ids);
+	int insertObject(SysLog entity);
+	
+	
 }
